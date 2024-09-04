@@ -13,8 +13,7 @@ def getCardName(cardID):
     return oracleJSON['name']
 
 
-### Pull CSV file into local memory, add OracleID and refresh Card Name
-
+### Pull CSV file into local memory, add OracleID and create Total Card Count
 with open("le.csv") as csvfile:  
     data = csv.DictReader(csvfile)
     for row in data:
@@ -23,4 +22,9 @@ with open("le.csv") as csvfile:
         row['Total Count'] = int(row['Number of Non-foil']) + int(row['Number of Foil'])
         print(row)
 
-### De-duplicate the list by OracleID, including the Total Count
+### De-duplicate the list by OracleID, including the Total Count Merge Down
+totalRows = 
+processingRow = 1
+for row in data:
+    currentTarget = row['OracleID']
+
