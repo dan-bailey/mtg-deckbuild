@@ -12,5 +12,15 @@ def getCardName(cardID):
     oracleJSON = requests.get('https://api.scryfall.com/cards/' + cardID).json()
     return oracleJSON['name']
 
-print(getOracleId('396f9198-67b6-45d8-91b4-dc853bff9623'))
-print(getCardName('396f9198-67b6-45d8-91b4-dc853bff9623'))
+
+### Pull CSV file into local memory, add OracleID and refresh Card Name
+
+with open("le.csv") as csvfile:  
+    data = csv.DictReader(csvfile)
+    for row in data:
+        # row['Name'] = getCardName(row['ScryfallID'])
+        row['OracleID'] = getOracleId(row['ScryfallID'])
+        row['Total Count'] = int(row['Number of Non-foil']) + int(row['Number of Foil'])
+        print(row)
+
+### De-duplicate the list by OracleID, including the Total Count
