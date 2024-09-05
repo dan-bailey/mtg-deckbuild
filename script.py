@@ -14,17 +14,27 @@ def getCardName(cardID):
 
 
 ### Pull CSV file into local memory, add OracleID and create Total Card Count
+listCount = 0
+cardList = []
 with open("le.csv") as csvfile:  
     data = csv.DictReader(csvfile)
     for row in data:
-        # row['Name'] = getCardName(row['ScryfallID'])
-        row['OracleID'] = getOracleId(row['ScryfallID'])
-        row['Total Count'] = int(row['Number of Non-foil']) + int(row['Number of Foil'])
-        print(row)
+        cardList.append({
+            'Name': row['Name'],
+            'ScryfallID': row['ScryfallID'],
+            'OracleID': getOracleId(row['ScryfallID']),
+            'TotalCards': int(row['Number of Non-foil']) + int(row['Number of Foil'])
+        })
 
 ### De-duplicate the list by OracleID, including the Total Count Merge Down
-totalRows = 
-processingRow = 1
-for row in data:
-    currentTarget = row['OracleID']
-
+print("Total Rows: " + str(len(cardList)))
+dedupedCardList = []
+for card in cardList:
+    target = card['OracleID']
+    print("Checking: " + card['Name'] + " (" + card['OracleID'] + ")")
+    for cardtarget in cardList:
+        if cardtarget['OracleID'] == target:
+            card['TotalCards'] += cardtarget['TotalCards']
+            cardList.remove(cardtarget)
+            print("Total Cards: " + str(card['TotalCards']) + "\n\n")
+            ## This logic is busted. Come back and fix this big-time.
