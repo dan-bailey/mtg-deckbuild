@@ -7,8 +7,7 @@ import datetime
 from IPython.display import display
 
 ### grab arguments (which should be archidekt deck IDs)
-# archidektID = sys.argv[1]
-archidektID = 4732056
+archidektID = sys.argv[1]
 
 def getOracleId(cardID):
     # send the cardID to Scryfall API and return the OracleID for use in the index
@@ -75,6 +74,7 @@ decklist = jsondecklist['cards']
 
 ### Create a new dataframe to hold the decklist 
 shoppingList = []
+haveList =[]
 archidekt = pd.DataFrame(columns=['Name', 'QuantityNeeded', 'OracleID', 'Have'])
 for card in decklist:
     name = card['card']['oracleCard']['name']
@@ -86,9 +86,15 @@ for card in decklist:
         shoppingList.append([name, needed - have])
     else:
         splats =""
+        haveList.append([name, needed, have])
     # print(f"{splats}{needed}x {name} (Have: {have})")
 print(" ")
 
 ### Print out the shopping list
+print("SHOPPING LIST")
 for item in shoppingList:
     print(f"{item[1]}x {item[0]}")
+
+print("HAVE LIST")
+for item in haveList:
+    print(f"{item[1]}x {item[0]} (Have: {item[2]})")
