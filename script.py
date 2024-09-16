@@ -20,6 +20,15 @@ def getCardName(cardID):
     oracleJSON = requests.get('https://api.scryfall.com/cards/' + cardID).json()
     return oracleJSON['name']
 
+def getCardCount(df, oracle):
+    # return the card quantity from a dataframe for the given OracleID
+    row_num = df[df['OracleID'] == oracle].index
+    if row_num.empty:
+        return 0
+    else:
+        row_num = row_num[0]
+        return int(df.loc[row_num, 'Quantity'])
+
 def printTime():
     return datetime.datetime.now().strftime("%H:%M:%S")
 
@@ -43,6 +52,7 @@ cardLibrary = cardLibrary.drop(columns=['Number of Non-foil', 'Number of Foil'])
 print(f"({printTime()}) Adding Oracle IDs. This could take awhile.")
 cardLibrary["OracleID"] = cardLibrary["ScryfallID"].apply(getOracleId)
 
+
 ## Report on the card library progress...
 print(f"({printTime()}) There were {str(cardLibrary.shape[0])} rows imported from the CSV.")
 
@@ -57,8 +67,28 @@ print(f"({printTime()}) There are now {str(cardLibrary.shape[0])} cards in the l
 
 ### Grab the Archidekt decklist
 print(" ")
-print(f"Attempting to build a decklist for Archidekt ID: {archidektID}.")
+print(f"({printTime()}) Attempting to build a decklist for Archidekt ID: {archidektID}.")
 print(" ")
 ### Grab the Archidekt decklist
-# jsondecklist = requests.get(f'https://archidekt.com/api/decks/{archidektID}/').json()
-# decklist = jsondecklist['cards']
+jsondecklist = requests.get(f'https://archidekt.com/api/decks/{archidektID}/').json()
+decklist = jsondecklist['cards']
+
+### Create a new dataframe to hold the decklist 
+shoppingList = []
+archidekt = pd.DataFrame(columns=['Name', 'QuantityNeeded', 'OracleID', 'Have'])
+for card in decklist:
+    name = card['card']['oracleCard']['name']
+    needed = card['quantity']
+    oracle = card['card']['oracleCard']['uid']
+    have = getCardCount(cardLibrary, card['card']['oracleCard']['uid'])
+    if have < needed:
+        splats = "*** "
+        shoppingList.append([name, needed - have])
+    else:
+        splats =""
+    # print(f"{splats}{needed}x {name} (Have: {have})")
+print(" ")
+
+### Print out the shopping list
+for item in shoppingList:
+    print(f"{item[1]}x {item[0]}")
