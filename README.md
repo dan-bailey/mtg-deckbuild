@@ -7,3 +7,6 @@ Script that takes your card list from Lion's Eye in CSV and checks it against Ar
 ## to-do list
 * clean up reporting
 * cache OracleIDs locally so I don't need to re-pull via API every time
+* get card prices from Card Kingdom and TCGPlayer to determine rough prices for building a deck (also locally cached)
+* ...
+* PROFIT!!!
