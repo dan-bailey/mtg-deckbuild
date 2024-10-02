@@ -1,5 +1,5 @@
 # mtg-deckbuild
-Script that takes your card list from [Lion's Eye](https://lionseyeapp.com/) in CSV and checks it against [Archidekt](https://archidekt.com) to show you what decks you can build with your library.  Uses Scryfall, and a Lion's Eye export file.
+Script that takes your Magic the Gathering card list from [Lion's Eye](https://lionseyeapp.com/) in CSV and checks it against [Archidekt](https://archidekt.com) to show you what decks you can build with your library.  Uses Scryfall, and a Lion's Eye export file.
 
 ## howto
 Export the Extended CSV from Lion's Eye and drop it into the same folder as this script, with the filename `le.csv`.
